@@ -12,12 +12,14 @@ public class PromotionFacadeImpl implements PromotionFacade {
 	}
 	
 	@Override
-	public Double getPromotion(String sku, Double price, Double discount) {
-		Double b = discount/100;
-		Double a = price * b;
-		Double res = price - a;
-		promotionService.create(sku.concat(" - ").concat(res.toString()));
-		return res;
+	public int getPromotion(String sku, Double price, Double discount) {
+		Double res = 0.0;
+		if ( price > 0 ) {
+			Double b = discount/100;
+			Double a = price * b;
+			res = price - a;
+		}
+		return promotionService.create(sku, res);
 	}
 
 	@Override

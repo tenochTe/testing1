@@ -3,49 +3,60 @@ package mx.com.testing1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeNoException;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import mx.com.testing1.facade.PromotionFacade;
+import mx.com.testing1.error.PromotionNotFoundException;
 import mx.com.testing1.service.PromotionService;
+import mx.com.testing1.service.impl.PromotionServiceImpl;
 
 @ContextConfiguration("spring/app-context.xml")
 @RunWith(MockitoJUnitRunner.class)
 public class PromotionServiceTest {
 	
-	private final ClassPathXmlApplicationContext context =new ClassPathXmlApplicationContext("spring/app-context.xml");
-	private final PromotionService promotionService = (PromotionService) context.getBean("promotionService");
+	@Mock
+	private PromotionService promotionServiceMock;
 	
-	@Before
-	public void beforeTest() {
-		
-	}
-
+	@InjectMocks
+	private PromotionServiceImpl promotionServiceImpl;
+	
+	
 	@Test
-	public void addingBehaviorTest() {
-		PromotionService promotionServiceMock = Mockito.mock(PromotionService.class);
-		
-		/** Mock implementation of methods from service interface  */
-		Mockito.when(promotionServiceMock.create("")).thenReturn(0);
-		Mockito.when(promotionServiceMock.create("PROMOTION")).thenReturn(1);
-		Mockito.when(promotionServiceMock.isActive("")).thenReturn(false);
-		Mockito.when(promotionServiceMock.isActive("1234567890")).thenReturn(true);
-		
-		/** Test with expected behavior */
-		Integer create = promotionServiceMock.create("");
+	public void injectedTest() {
+				
+		/** Test with expected interface behavior */
+		Integer create = this.promotionServiceImpl.create("PROMOTION", 0.0);
 			assertEquals(new Integer(0), create);
-		create = promotionServiceMock.create("PROMOTION");
+			
+		create = this.promotionServiceImpl.create("PROMOTION", 25.50);
 			assertEquals(new Integer(1), create);
 		
-		assertFalse("No Active", promotionServiceMock.isActive(""));
-		assertTrue("Is Active",promotionServiceMock.isActive("1234567890"));
+		assertFalse(this.promotionServiceImpl.isActive(""));
 		
+		assertTrue(this.promotionServiceImpl.isActive("1234567890"));
+		
+		try {
+			this.promotionServiceImpl.update("SKU");
+			this.promotionServiceImpl.update("");
+		} catch (PromotionNotFoundException e) {
+			assumeNoException(e);
+		}
 		
 	}
+	
+	@Test(expected = PromotionNotFoundException.class )
+	public void exceptionUpdate() throws PromotionNotFoundException {
+		assertFalse( promotionNotFoundException() );
+	}
+	
+	private boolean promotionNotFoundException() throws PromotionNotFoundException {
+		throw new PromotionNotFoundException();
+	}
+	
 }

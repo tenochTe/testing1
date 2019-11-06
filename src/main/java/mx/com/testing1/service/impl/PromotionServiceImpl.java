@@ -1,18 +1,18 @@
 package mx.com.testing1.service.impl;
 
+import mx.com.testing1.error.PromotionNotFoundException;
 import mx.com.testing1.service.PromotionService;
 
 public class PromotionServiceImpl implements PromotionService {
 	
 	@Override
-	public int create(String promotion) {
-		int isCreated = promotion.length();
-		if ( isCreated > 0 )
+	public int create(String promotion, Double price) {
+		if ( price > 0 )
 			System.out.println("CREATED: ".concat( promotion ));
 		else
 			System.out.println("NO CREATED");
 		
-		return ( isCreated > 0 ) ? 1 : 0;
+		return ( price > 0 ) ? 1 : 0;
 	}
 
 	@Override
@@ -27,14 +27,13 @@ public class PromotionServiceImpl implements PromotionService {
 	}
 
 	@Override
-	public int update(String sku) {
+	public void update(String sku) throws PromotionNotFoundException {
 		int isCreated = sku.length();
 		if ( isCreated > 0 )
 			System.out.println("UPDATED: ".concat( sku ));
 		else
-			System.out.println("NO UPDATED");
+			new PromotionNotFoundException();
 		
-		return ( isCreated > 0 ) ? 1 : 0;
 	}
 
 }
