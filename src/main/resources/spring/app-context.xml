@@ -11,7 +11,7 @@
 	<bean id="promotionService" class="mx.com.testing1.service.impl.PromotionServiceImpl" />
 	
 	<!-- Inject Beans -->
-	<bean id="promotionFacadeImpl" class="mx.com.testing1.facade.impl.PromotionFacadeImpl" >
+	<bean id="promotionFacade" class="mx.com.testing1.facade.impl.PromotionFacadeImpl" >
 		<constructor-arg name="promotionService" ref="promotionService" />
 	</bean>
 

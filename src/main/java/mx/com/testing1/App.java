@@ -12,7 +12,7 @@ public class App {
 	public static void main( String[] args ) {
     	
         context =new ClassPathXmlApplicationContext("spring/app-context.xml");
-        PromotionFacade promotionFacade = (PromotionFacade) context.getBean("promotionFacadeImpl");
+        PromotionFacade promotionFacade = (PromotionFacade) context.getBean("promotionFacade");
     	
     	Product p1 =new Product.Builder()
     			.withSku("131234324")

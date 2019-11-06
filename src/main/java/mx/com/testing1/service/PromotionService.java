@@ -2,6 +2,10 @@ package mx.com.testing1.service;
 
 public interface PromotionService {
 	
-	void create(String promotion);
+	int create(String promotion);
+	
+	boolean isActive(String sku);
+	
+	int update(String sku);
 
 }

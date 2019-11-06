@@ -19,6 +19,11 @@ public class PromotionFacadeImpl implements PromotionFacade {
 		promotionService.create(sku.concat(" - ").concat(res.toString()));
 		return res;
 	}
+
+	@Override
+	public boolean validatePromotion(String sku) {
+		return promotionService.isActive(sku);
+	}
 	
 
 }
